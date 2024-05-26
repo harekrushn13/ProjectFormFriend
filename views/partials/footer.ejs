@@ -1,0 +1,9 @@
+<div id="footer">
+	<hr style="width: 50%; margin: 2rem auto" />
+	<p class="logo copyright">Form Friend</p>
+</div>
+<% if (typeof(userError) != "undefined") { %>
+<script>
+	Swal.fire({ title: "Error", text: `<%- userError %>`, icon: "error" });
+</script>
+<% } %>

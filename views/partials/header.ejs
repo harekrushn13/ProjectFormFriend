@@ -1,0 +1,94 @@
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>Form Friend</title>
+
+		<!-- title icon -->
+		<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+		<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png" />
+		<link rel="manifest" href="favicon/site.webmanifest" />
+
+		<link
+			href="https://fonts.googleapis.com/css2?family=Comic+Neue&family=Merriweather:ital,wght@1,300&family=Montserrat:wght@300&display=swap"
+			rel="stylesheet"
+		/>
+
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+			crossorigin="anonymous"
+		/>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+			crossorigin="anonymous"
+		></script>
+
+		<script
+			src="https://code.jquery.com/jquery-3.7.1.min.js"
+			integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+			crossorigin="anonymous"
+		></script>
+
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	</head>
+	<body>
+		<!-- navbar -->
+		<nav class="navbar">
+			<div class="logo flex-left">
+				<p style="margin-bottom: 0px" onclick="window.open('/','_self')">Form Friend</p>
+			</div>
+			<div class="flex-rigth">
+				<% if (typeof(userData) =="undefined") { %>
+				<a href="/login"><button class="login">Login</button></a>
+				<% } else { %>
+				<div class="right-side">
+					<img id="profilepic" loading="lazy" src="<%= userData.profilePicture %>" />
+					<p id="username"><%= userData.userName %></p>
+					<a href="/logout"><button class="login logout">Logout</button></a>
+				</div>
+				<% } %>
+			</div>
+			<style>
+				#right-side {
+					display: inline;
+					float: right;
+					text-align: right;
+				}
+
+				#flex-right a {
+					vertical-align: middle;
+				}
+
+				#right-side a {
+					vertical-align: middle;
+				}
+
+				#username {
+					display: inline;
+					font-size: 20px;
+				}
+
+				#profilepic {
+					height: 30px;
+					width: 30px;
+					border-radius: 50px;
+					display: inline;
+				}
+
+				.logout {
+					margin-left: 0.5rem;
+					margin-right: 1rem;
+					width: 100px;
+				}
+			</style>
+		</nav>
+
+		<hr class="separator separator--line" />
+	</body>
+</html>
