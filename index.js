@@ -7,6 +7,7 @@ const session = require("express-session");
 const { asyncRouteHandler } = require("./utils/route.utils");
 const { home, authMiddleware, googleRedirect } = require("./controllers/auth.controller");
 const { authorizationUrl } = require("./utils/google.utils");
+const { viewForms } = require("./controllers/form.controller");
 
 const app = express();
 
@@ -53,10 +54,12 @@ app.get("/login", (req, res) => {
 
 app.get("/redirect", asyncRouteHandler(googleRedirect));
 
+app.get("/forms", authMiddleware, asyncRouteHandler(viewForms));
+
 // app.use(authMiddleware);
 
 app.all("*", (req, res) => {
-	res.render("error");
+	res.render("error", { userError: "Page not found" });
 });
 
 connectDb().then(() => {

@@ -1,3 +1,4 @@
+const { google } = require("googleapis");
 const userModel = require("../models/user.model");
 const cache = require("../utils/cache.utils");
 const { oauth2Client } = require("../utils/google.utils");
@@ -52,6 +53,7 @@ async function viewForms(req, res, next) {
 			if (!enrollquestionid) throw new Error("Invalid Form");
 		} catch (error) {
 			console.log(error);
+			req.session.error = error.message;
 			res.redirect("/");
 			return;
 		}
@@ -68,7 +70,7 @@ async function viewForms(req, res, next) {
 		element.allenrolls = allenrolls;
 	}
 
-	res.render("forms", { formsData: formsData, userData: userData });
+	res.render("forms", { userForms, userData });
 }
 
 module.exports = { viewForms };

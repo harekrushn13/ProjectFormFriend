@@ -1,5 +1,7 @@
 const { google } = require("googleapis");
 const { oauth2Client } = require("../utils/google.utils");
+const userModel = require("../models/user.model");
+const jwt = require("jsonwebtoken");
 
 async function authMiddleware(req, res, next) {
 	if (!req.session.refreshToken || !req.session.userData) {
@@ -14,12 +16,25 @@ async function authMiddleware(req, res, next) {
  * @param {import("express").Response} res
  */
 async function home(req, res, next) {
-	if (!req.session.refreshToken) {
-		res.render("home");
+	const userError = req.session.error;
+	req.session.error = undefined;
+
+	let token = req.cookies.token;
+	let refreshToken = req.session.refreshToken;
+	if (!refreshToken) {
+		try {
+			const data = jwt.verify(token, process.env.SESSION_SECRET);
+			refreshToken = data.refreshToken;
+			req.session.refreshToken = refreshToken;
+		} catch (error) {}
+	}
+
+	if (!refreshToken) {
+		res.render("home", { userError });
 		return;
 	}
 	oauth2Client.setCredentials({
-		refresh_token: req.session.refreshToken,
+		refresh_token: refreshToken,
 	});
 	let userData = {
 		email: null,
@@ -38,16 +53,32 @@ async function home(req, res, next) {
 	} catch (error) {
 		console.log(error);
 		req.session.refreshToken = null;
-		res.render("home");
+		res.clearCookie("token");
+		res.render("home", { userError });
 		return;
 	}
 	userData.email = profileData.data.email;
 	userData.userName = profileData.data.name;
 	userData.profilePicture = profileData.data.picture;
 
-	req.session.userData = userData;
+	await userModel.updateOne(
+		{
+			email: userData.email,
+		},
+		{
+			$set: {
+				username: userData.userName,
+				refresh_token: refreshToken,
+				updatedAt: new Date(),
+			},
+		},
+		{ upsert: true }
+	);
 
-	res.render("home", { userData });
+	req.session.userData = userData;
+	res.cookie("token", jwt.sign({ refreshToken }, process.env.SESSION_SECRET), { httpOnly: true });
+
+	res.render("home", { userData, userError });
 }
 
 async function googleRedirect(req, res, next) {

@@ -48,7 +48,12 @@
 				<a href="/login"><button class="login">Login</button></a>
 				<% } else { %>
 				<div class="right-side">
-					<img id="profilepic" loading="lazy" src="<%= userData.profilePicture %>" />
+					<img
+						referrerpolicy="no-referrer"
+						id="profilepic"
+						loading="lazy"
+						src="<%= userData.profilePicture %>"
+					/>
 					<p id="username"><%= userData.userName %></p>
 					<a href="/logout"><button class="login logout">Logout</button></a>
 				</div>
