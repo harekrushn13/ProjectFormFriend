@@ -4,7 +4,7 @@ const connectDb = require("./utils/db.utils");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const session = require("express-session");
-const {asyncRouteHandler} = require("./utils/route.utils");
+const {asyncRouteHandler, errorHandler, errorShower} = require("./utils/route.utils");
 const {home, authMiddleware, googleRedirect} = require("./controllers/auth.controller");
 const {authorizationUrl} = require("./utils/google.utils");
 const {viewForms} = require("./controllers/form.controller");
@@ -52,6 +52,7 @@ app.use(cookieParser());
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(session({secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false}));
+app.use(errorShower);
 
 app.get("/", asyncRouteHandler(home));
 
@@ -72,6 +73,8 @@ app.post("/admin/batches", adminMiddleware, upload.single("sheet"), asyncRouteHa
 app.all("*", (req, res) => {
     res.render("error", {userError: "Page not found"});
 });
+
+app.use(errorHandler);
 
 connectDb().then(() => {
     app.listen(process.env.PORT || 3000, () => {

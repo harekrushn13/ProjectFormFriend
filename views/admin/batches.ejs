@@ -25,12 +25,52 @@
                 <tr>
                     <td><%= index + 1 %></td>
                     <td><%= batch.batch %></td>
-                    <td><%= batch.details.length %></td>
+                    <td>
+                        <a href="" class="text-primary-emphasis" data-bs-toggle="modal" data-bs-target="#batch<%= index + 1 %>">
+                            <%= batch.details.length %>
+                        </a>
+
+                        <div id="batch<%= index + 1 %>" class="modal fade" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5"><%= batch.batch %></h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Enrollment</th>
+                                                    <th>Email</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <% batch.details.forEach((detail, index)=>{ %>
+                                                    <tr>
+                                                        <td><%= index + 1 %></td>
+                                                        <td><%= detail.enrollment %></td>
+                                                        <td><%= detail.email %></td>
+                                                    </tr>
+                                                <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             <% }) %>
             </tbody>
         </table>
     </div>
+
+
     <div id="addBatch" class="modal fade" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -41,6 +81,10 @@
                 <div class="modal-body">
                     <form method="post" enctype="multipart/form-data" id="addBatchForm">
                         <div>
+                            <label class="form-label" for="batchName">Batch Name</label>
+                            <input type="text" id="batchName" class="form-control mt-0" name="name"/>
+                        </div>
+                        <div class="mt-2">
                             <label class="form-label" for="batchSheet">Select Sheet</label>
                             <input type="file" id="batchSheet" class="form-control" name="sheet"
                                    accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

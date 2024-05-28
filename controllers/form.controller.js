@@ -4,7 +4,7 @@ const cache = require("../utils/cache.utils");
 const { oauth2Client } = require("../utils/google.utils");
 
 async function viewForms(req, res, next) {
-	let userData = req.session.userData;
+	let userData = req.locals.userData;
 	let userForms = null;
 	const forms = google.forms({
 		version: "v1",

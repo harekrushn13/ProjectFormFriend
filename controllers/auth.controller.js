@@ -8,6 +8,7 @@ async function authMiddleware(req, res, next) {
 		res.redirect("/");
 		return;
 	}
+	res.locals.userData = req.session.userData;
 	next();
 }
 /**
@@ -16,9 +17,6 @@ async function authMiddleware(req, res, next) {
  * @param {import("express").Response} res
  */
 async function home(req, res, next) {
-	const userError = req.session.error;
-	req.session.error = undefined;
-
 	let token = req.cookies.token;
 	let refreshToken = req.session.refreshToken;
 	if (!refreshToken) {
@@ -30,7 +28,7 @@ async function home(req, res, next) {
 	}
 
 	if (!refreshToken) {
-		res.render("home", { userError });
+		res.render("home");
 		return;
 	}
 	oauth2Client.setCredentials({
@@ -54,7 +52,7 @@ async function home(req, res, next) {
 		console.log(error);
 		req.session.refreshToken = null;
 		res.clearCookie("token");
-		res.render("home", { userError });
+		res.render("home");
 		return;
 	}
 	userData.email = profileData.data.email;
@@ -78,7 +76,7 @@ async function home(req, res, next) {
 	req.session.userData = userData;
 	res.cookie("token", jwt.sign({ refreshToken }, process.env.SESSION_SECRET), { httpOnly: true });
 
-	res.render("home", { userData, userError });
+	res.render("home");
 }
 
 async function googleRedirect(req, res, next) {
