@@ -1,0 +1,59 @@
+<%- include('partials/header') %>
+<div class="container-fluid p-3">
+    <div class="d-flex justify-content-between">
+        <div class="fs-3">Batches</div>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBatch">Add Batch</button>
+    </div>
+    <div class="w-100 table-responsive mt-3">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Batch</th>
+                <th>No. of students</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% if(batches.length == 0) { %>
+                <tr>
+                    <td colspan="3">
+                        <div class="py-5 text-center">No data available</div>
+                    </td>
+                </tr>
+            <% } %>
+            <% batches.forEach((batch, index)=>{ %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= batch.batch %></td>
+                    <td><%= batch.details.length %></td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+    </div>
+    <div id="addBatch" class="modal fade" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Add Batch</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" enctype="multipart/form-data" id="addBatchForm">
+                        <div>
+                            <label class="form-label" for="batchSheet">Select Sheet</label>
+                            <input type="file" id="batchSheet" class="form-control" name="sheet"
+                                   accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                            />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="$('#addBatchForm').submit()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('partials/footer') %>

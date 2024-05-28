@@ -38,32 +38,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-<!-- navbar -->
 <nav class="navbar border-bottom border-black">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
-        <a class="navbar-brand">FormFriend</a>
-        <div>
-            <% if (typeof (userData) == "undefined") { %>
-                <a href="/login">
-                    <button class="btn btn-outline-primary">Login</button>
-                </a>
-            <% } else { %>
-                <div class="d-flex align-items-center column-gap-2">
-                    <div>
-                        <img
-                                class="rounded-pill"
-                                style="width: 40px;height:40px"
-                                referrerpolicy="no-referrer"
-                                loading="lazy"
-                                src="<%= userData.profilePicture %>"
-                        />
-                    </div>
-                    <div class="fs-4"><%= userData.userName %></div>
-                    <a href="/logout">
-                        <button class="btn btn-outline-danger">Logout</button>
-                    </a>
-                </div>
-            <% } %>
-        </div>
+    <div class="container-fluid d-flex justify-content-between">
+        <a class="navbar-brand" href="/admin">FormFriend Admin</a>
+        <% if(typeof (loggedIn) != "undefined") { %>
+            <button class="btn btn-outline-danger">Logout</button>
+        <% } %>
     </div>
 </nav>
+
