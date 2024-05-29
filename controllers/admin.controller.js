@@ -2,6 +2,7 @@ const batchModel = require("../models/batch.model")
 const xlsx = require("xlsx");
 const path = require("node:path");
 const fs = require("fs")
+const {isValidObjectId} = require("mongoose");
 
 async function adminMiddleware(req, res, next) {
     if (req.session.admin) {
@@ -31,14 +32,14 @@ async function adminLoginPost(req, res, next) {
 }
 
 async function adminHome(req, res, next) {
-    const batches = await batchModel.countDocuments({});
+    const batches = await batchModel.countDocuments({is_active:1});
     console.log(batches);
     res.render("admin/home", {batches});
 }
 
 
 async function adminBatches(req, res, next) {
-    const batches = await batchModel.find({}).sort({createdAt: -1});
+    const batches = await batchModel.find({is_active: 1}).sort({createdAt: -1});
     res.render("admin/batches", {batches});
 }
 
@@ -79,10 +80,21 @@ async function adminBatchesPost(req, res, next) {
         }
         details.push({enrollment: ele["enrollment"], email: ele["email"], name: ele["name"]});
     }
-    const batch = new batchModel({batch:name, details});
+    const batch = new batchModel({batch: name, details});
     await batch.save();
     req.session.success = "Batch added successfully!";
     res.redirect("/admin/batches");
 }
 
-module.exports = {adminLogin, adminLoginPost, adminHome, adminMiddleware, adminBatches, adminBatchesPost};
+async function adminBatchesDelete(req, res, next) {
+    const {id} = req.params;
+    if (!isValidObjectId(id)) {
+        req.session.error = "Invalid Request";
+        res.redirect("/admin/batches");
+    }
+    const batch = await batchModel.updateOne({_id: id}, {$set: {is_active: 0}});
+    req.session.success = "Batch Deleted Successfully"
+    res.redirect("/admin/batches");
+}
+
+module.exports = {adminLogin, adminLoginPost, adminHome, adminMiddleware, adminBatches, adminBatchesPost, adminBatchesDelete};

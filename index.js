@@ -13,7 +13,9 @@ const {
     adminLoginPost,
     adminMiddleware,
     adminHome,
-    adminBatches, adminBatchesPost
+    adminBatches,
+    adminBatchesPost,
+    adminBatchesDelete
 } = require("./controllers/admin.controller");
 const upload = require("./utils/upload.utils")
 const app = express();
@@ -67,8 +69,9 @@ app.get("/forms", authMiddleware, asyncRouteHandler(viewForms));
 app.get("/admin/login", asyncRouteHandler(adminLogin));
 app.post("/admin/login", asyncRouteHandler(adminLoginPost));
 app.get("/admin", adminMiddleware, asyncRouteHandler(adminHome));
-app.get("/admin/batches", adminMiddleware, asyncRouteHandler(adminBatches))
-app.post("/admin/batches", adminMiddleware, upload.single("sheet"), asyncRouteHandler(adminBatchesPost))
+app.get("/admin/batches", adminMiddleware, asyncRouteHandler(adminBatches));
+app.post("/admin/batches", adminMiddleware, upload.single("sheet"), asyncRouteHandler(adminBatchesPost));
+app.get("/admin/batches/:id/delete", adminMiddleware, asyncRouteHandler(adminBatchesDelete))
 
 app.all("*", (req, res) => {
     res.render("error", {userError: "Page not found"});

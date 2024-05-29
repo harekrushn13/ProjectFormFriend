@@ -11,12 +11,13 @@
                 <th>#</th>
                 <th>Batch</th>
                 <th>No. of students</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
             <% if(batches.length == 0) { %>
                 <tr>
-                    <td colspan="3">
+                    <td colspan="4">
                         <div class="py-5 text-center">No data available</div>
                     </td>
                 </tr>
@@ -26,7 +27,8 @@
                     <td><%= index + 1 %></td>
                     <td><%= batch.batch %></td>
                     <td>
-                        <a href="" class="text-primary-emphasis" data-bs-toggle="modal" data-bs-target="#batch<%= index + 1 %>">
+                        <a href="" class="text-primary-emphasis" data-bs-toggle="modal"
+                           data-bs-target="#batch<%= index + 1 %>">
                             <%= batch.details.length %>
                         </a>
 
@@ -63,6 +65,9 @@
                                 </div>
                             </div>
                         </div>
+                    </td>
+                    <td>
+                        <a href="/admin/batches/<%= batch._id %>/delete"><i class="fa-solid fa-trash text-danger"></i></a>
                     </td>
                 </tr>
             <% }) %>

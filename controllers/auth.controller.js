@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 
 async function authMiddleware(req, res, next) {
 	if (!req.session.refreshToken || !req.session.userData) {
-		res.redirect("/");
+		res.redirect("/login");
 		return;
 	}
 	res.locals.userData = req.session.userData;
